@@ -13,6 +13,7 @@ import sys
 from std_msgs.msg import Float64
 
 from reflex_base_services import *
+from personalized_services import *
 
 # interface
 # 1 arguments       = apply to whole hand
@@ -275,6 +276,18 @@ if __name__ == '__main__':
     s4 = "/reflex/kill_current"
     rospy.loginfo("Advertising %s service", s4)
     s4 = rospy.Service(s4, Empty, sh4)
+
+
+    # PERSONAL SERVICES ###############
+
+    sh5 = GraspFingertipsService(reflex_hand)
+    s5 = "/reflex/fingertips_grasping"
+    rospy.loginfo("Advertising %s service", s5)
+    s5 = rospy.Service(s5, Empty, sh5)
+
+    ###################################
+
+
 
     r_fast = rospy.Rate(50)
     r_slow = rospy.Rate(1)

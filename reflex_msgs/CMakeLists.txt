@@ -47,6 +47,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   Hand.msg
+  HandCommand.msg
   Palm.msg
   Finger.msg
   Dynamixel.msg

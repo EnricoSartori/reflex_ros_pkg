@@ -12,6 +12,9 @@
   <!-- <node name="reflex"            pkg="reflex"       type="reflex_base.py"         output="screen"/> -->
   <!-- B) Uncomment reflex_smarts to have access to reflex plus some pre-programmed moves like 'open' and 'tighten' (DEFAULT) -->
   <node name="reflex_smarts"          pkg="reflex"       type="reflex_smarts.py"       output="screen"	respawn="true"/>
+  <node name="reflex_move"            pkg="reflex"       type="reflex_polling.py"      output="screen"  respawn="true"/>
+  
+
 
   <!-- A) Uncomment these lines to view the tf frames in rviz. You'll need to install tf and rviz -->
   <node name="reflex_tf_broadcaster"  pkg="reflex"       type="reflex_tf_broadcaster"  output="screen"/>
@@ -21,4 +24,15 @@
   <!-- <include file="$(find reflex_visualizer)/launch/reflex_visualizer.launch"/> -->
   
   <!--include file="$(find dococ)/launch/buttons.launch"/-->
+
+
+  <!-- Services to comunicate with arduino -->
+
+  <node name="reflex_to_rosserial"      pkg="reflex"       type="serialize_to_arduino.py"        output="screen"  respawn="true"/>
+
+  <!-- Enable arduino comunication
+  <node name="rosserial_to_arduino"      pkg="rosserial_python"       type="serial_node.py" args="_port:='/dev/ttyACM0'"  respawn="true"/>
+
+  -->
+
 </launch>

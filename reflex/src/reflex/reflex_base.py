@@ -55,6 +55,7 @@ class ReFlex(object):
                                      'guarded_move',
                                      'guarded_move_fast',
                                      'solid_contact',
+                                     'solid_fingertips_contact',
                                      'avoid_contact',
                                      'maintain_contact',
                                      'dither',
@@ -208,6 +209,24 @@ class ReFlex(object):
                     rospy.loginfo(publishing_error + 'solid_contact')
                     self.working[i] = False
 
+            elif self.control_mode[i] == 'solid_fingertips_contact':
+                if self.hand.tactile_publishing and self.hand.joints_publishing:
+
+                    if self.working[i]:
+                        self.state_debugger.set_finger_state(i, 'Waiting for (contacted) or (end of range)')
+
+                    if self.fingertips_full_contact(i):
+                        self.working[i] = False
+                        self.state_debugger.set_finger_state(i, '(contacted)')
+                    elif self.hand.finger[i].spool >= self.TENDON_MAX:
+                        self.working[i] = False
+                        self.state_debugger.set_finger_state(i, '(end of range)')
+                    elif self.working[i]:
+                        self.cmd_spool[i] = self.hand.finger[i].spool + self.FINGER_STEP
+                else:
+                    rospy.loginfo(publishing_error + 'solid_fingertips_contact')
+                    self.working[i] = False
+
             # ceaseless modes
             elif self.control_mode[i] == 'dither':              # if in contact, loosen; if no contact, tighten
                 self.state_debugger.set_finger_state(i, 'In state until commanded otherwise')
@@ -318,6 +337,9 @@ class ReFlex(object):
         elif mode == 'solid_contact':
             self.working[i] = True
             self.control_mode[i] = 'solid_contact'
+        elif mode == 'solid_fingertips_contact':
+            self.working[i] = True
+            self.control_mode[i] = 'solid_fingertips_contact'
         elif mode == 'avoid_contact':
             self.working[i] = False
             self.control_mode[i] = 'avoid_contact'
@@ -402,6 +424,12 @@ class ReFlex(object):
                and (self.distal_sensor_contact(finger_index)\
                     or self.distal_deflection_contact(finger_index))
 
+    def fingertips_full_contact(self, finger_index):
+        """ Returns boolean on whether both finger links have made contact,
+        whether via sensor or by distal deflection """
+        return (self.distal_sensor_contact(finger_index)\
+                    or self.distal_deflection_contact(finger_index))
+
     def proximal_sensor_contact(self, finger_index):
         """ Returns a boolean indicating any proximal sensor contact """
         return sum(self.hand.finger[finger_index].contact[0:5])
@@ -443,6 +471,9 @@ class ReFlex(object):
 
     def solid_contact(self):
         self.__command_base('solid_contact')
+
+    def solid_fingertips_contact(self):
+        self.__command_base('solid_fingertips_contact')
 
     def avoid_contact(self):
         self.__command_base('avoid_contact')
