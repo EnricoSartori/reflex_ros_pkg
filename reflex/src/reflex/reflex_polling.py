@@ -13,10 +13,11 @@ class ReFlex_Polling(ReFlex):
         
 
         def callback(data):
-    	    # data is a HandCommand variable
-            for i in range(0, len(data.angles)):
-                self.move_finger(i, data.angles[i])
-        
+            # data is a HandCommand variable
+            self.move_finger(0, data.angles[0])
+    	    self.move_finger(1, data.angles[1])
+            #self.move_finger(2, data.angles[2])
+            
         rospy.Subscriber("reflex_commander", HandCommand, callback)
         # spin: this function generate the polling
         rospy.spin()

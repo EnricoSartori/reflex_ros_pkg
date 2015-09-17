@@ -37,25 +37,6 @@ def mymin(list):
         if i > 100 or i < -255: 
             return -255
     return min(list)
-
-def talker():
-    rospy.init_node('handListener')
-    rospy.Rate(10)
-    pub = rospy.Publisher('hand_to_arduino', String, queue_size=10)
-    rospy.Subscriber('/reflex_hand', Hand, callback)
-    
-    while not rospy.is_shutdown():
-        rospy.spin()
-  
-	#pub = rospy.Publisher('chatter', String, queue_size=10)
-    #rospy.init_node('talker', anonymous=True)
-    #rate = rospy.Rate(10) # 10hz
-    #while not rospy.is_shutdown():
-    #    hello_str = "hello world %s" % rospy.get_time()
-    #    rospy.loginfo(hello_str)
-    #    rospy.loginfo(hand.finger[0].pressure)
-    #    pub.publish(hello_str)
-    #    rate.sleep()
 	
 if __name__ == '__main__':
     try:

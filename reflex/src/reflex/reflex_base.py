@@ -15,6 +15,7 @@ import rospy
 import numpy as np
 from copy import deepcopy
 import sys
+import math
 
 from std_msgs.msg import Float64
 from std_srvs.srv import Empty
@@ -86,6 +87,7 @@ class ReFlex(object):
         self.call_time = [-1.0, -1.0, -1.0, -1.0]           # used to track when commands are called
         self.cmd_spool = np.array([-1.0, -1.0, -1.0])       # finger commanded position, radians spool rotation
         self.cmd_spool_old = deepcopy(self.cmd_spool)       # Previous cmd position. If current cmd position matches, give no command
+        self.target_spool = np.array([0.0,0.0,0.0])
 
         # Set up publishers
         self.actuator_pub = rospy.Publisher('/set_reflex_hand',
@@ -321,7 +323,7 @@ class ReFlex(object):
         self.working[finger_index] = True
         self.cmd_spool[finger_index] = goal_pos
         return
-
+    
     # Parses modes and turns them into control_mode for control_loop
     def __command_base_finger(self, finger, mode):
         i = self.FINGER_MAP[finger]

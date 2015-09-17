@@ -28,11 +28,10 @@
 
   <!-- Services to comunicate with arduino -->
 
-  <node name="reflex_to_rosserial"      pkg="reflex"       type="serialize_to_arduino.py"        output="screen"  respawn="true"/>
+  <node name="reflex_to_rosserial" pkg="reflex" type="serialize_to_arduino.py" output="screen" respawn="true"/>
 
-  <!-- Enable arduino comunication
-  <node name="rosserial_to_arduino"      pkg="rosserial_python"       type="serial_node.py" args="_port:='/dev/ttyACM0'"  respawn="true"/>
-
+  <!-- Enable arduino comunication 
+  <node name="rosserial_to_arduino" pkg="rosserial_python" type="serial_node.py" args="_port:='/dev/ttyACM0'"  respawn="true"/>
   -->
 
 </launch>
